@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.time.Instant;
 
 @RestControllerAdvice
@@ -16,6 +17,29 @@ public class GlobalExceptionHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
 
         problem.setTitle("Product not found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ProblemDetail handleIo(IOException ex) {
+        // could not process the image file
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+
+        problem.setTitle("File Processing Error");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleUnexpected(Exception ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+
+        problem.setTitle("Internal Server Error");
         problem.setProperty("timestamp", Instant.now());
 
         return problem;

@@ -40,8 +40,10 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<?> addProduct(@RequestPart Product product,
-                                        @RequestPart MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Product> addProduct(
+            @RequestPart Product product,
+            @RequestPart MultipartFile imageFile
+    ) throws IOException {
         Product returnedProduct = service.addProduct(product, imageFile);
         return new ResponseEntity<>(returnedProduct, HttpStatus.CREATED);
     }
@@ -54,5 +56,25 @@ public class ProductController {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(product.getImageType()))
                 .body(imageFile);
+    }
+
+    @PutMapping("/product/{id}/")
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable int id,
+            @RequestPart Product product,
+            @RequestPart MultipartFile imageFile
+    ) {
+        Product returnedProduct = service.updateProduct(id, product, imageFile);
+
+        return ResponseEntity.ok()
+                .body(returnedProduct);
+    }
+
+    @DeleteMapping("/product/{id}/")
+    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
+        service.deleteProduct(id);
+
+        return ResponseEntity.noContent()
+                .build();
     }
 }

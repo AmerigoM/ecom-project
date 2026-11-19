@@ -14,9 +14,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ProblemDetail handleNotFound(ProductNotFoundException ex) {
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
 
         problem.setTitle("Product not found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(ImageProcessingException.class)
+    public ProblemDetail handleImageProcessing(ImageProcessingException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getMessage()
+        );
+
+        problem.setTitle("Internal Server Error");
         problem.setProperty("timestamp", Instant.now());
 
         return problem;
@@ -26,7 +42,9 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleIo(IOException ex) {
         // could not process the image file
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getMessage()
+        );
 
         problem.setTitle("File Processing Error");
         problem.setProperty("timestamp", Instant.now());
@@ -37,7 +55,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getMessage()
+        );
 
         problem.setTitle("Internal Server Error");
         problem.setProperty("timestamp", Instant.now());

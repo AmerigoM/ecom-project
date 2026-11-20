@@ -46,7 +46,6 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
 
-        problem.setTitle("File Processing Error");
         problem.setProperty("timestamp", Instant.now());
 
         return problem;

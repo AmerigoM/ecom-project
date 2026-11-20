@@ -26,12 +26,16 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Product addProduct(Product product, MultipartFile imageFile) throws IOException {
-        product.setImageName(imageFile.getOriginalFilename());
-        product.setImageType(imageFile.getContentType());
-        product.setImageData(imageFile.getBytes());
+    public Product addProduct(Product product, MultipartFile imageFile) {
+        try {
+            product.setImageName(imageFile.getOriginalFilename());
+            product.setImageType(imageFile.getContentType());
+            product.setImageData(imageFile.getBytes());
 
-        return repository.save(product);
+            return repository.save(product);
+        } catch (IOException ex) {
+            throw new ImageProcessingException("Could not read the uploaded image", ex);
+        }
     }
 
     public Product updateProduct(int id, Product product, MultipartFile imageFile) {
@@ -57,5 +61,9 @@ public class ProductService {
         }
 
         repository.deleteById(id);
+    }
+
+    public List<Product> searchProducts(String keyword) {
+        return repository.searchProducts(keyword);
     }
 }

@@ -43,7 +43,7 @@ public class ProductController {
     public ResponseEntity<Product> addProduct(
             @RequestPart Product product,
             @RequestPart MultipartFile imageFile
-    ) throws IOException {
+    ) {
         Product returnedProduct = service.addProduct(product, imageFile);
         return new ResponseEntity<>(returnedProduct, HttpStatus.CREATED);
     }
@@ -76,5 +76,12 @@ public class ProductController {
 
         return ResponseEntity.noContent()
                 .build();
+    }
+
+    @GetMapping("products/search")
+    public ResponseEntity<List<Product>> searchProduct(@RequestParam String keyword) {
+        List<Product> products = service.searchProducts(keyword);
+
+        return ResponseEntity.ok(products);
     }
 }

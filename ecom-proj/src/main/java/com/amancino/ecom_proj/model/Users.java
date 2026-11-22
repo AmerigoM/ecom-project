@@ -1,12 +1,14 @@
 package com.amancino.ecom_proj.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Users {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
 

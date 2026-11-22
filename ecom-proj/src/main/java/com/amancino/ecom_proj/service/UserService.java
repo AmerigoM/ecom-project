@@ -18,6 +18,9 @@ public class UserService {
     @Autowired
     private AuthenticationManager authManager;
 
+    @Autowired
+    private JWTService jwtService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public Users register(Users user) {
@@ -33,6 +36,6 @@ public class UserService {
             )
         );
 
-        return "Success";
+        return jwtService.generateToken(user.getUsername());
     }
 }

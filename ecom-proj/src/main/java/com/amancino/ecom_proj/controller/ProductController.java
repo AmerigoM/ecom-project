@@ -3,6 +3,7 @@ package com.amancino.ecom_proj.controller;
 import com.amancino.ecom_proj.exception.ProductNotFoundException;
 import com.amancino.ecom_proj.model.Product;
 import com.amancino.ecom_proj.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,19 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
 
+    public record RequestInfo(String method, String uri, String userAgent, String remoteAddress) {}
+
     @Autowired
     private ProductService service;
 
     @RequestMapping("/")
-    public String greet() {
-        return "Hello world";
+    public RequestInfo greet(HttpServletRequest request) {
+        return new RequestInfo(
+                request.getMethod(),
+                request.getRequestURI(),
+                request.getHeader("User-Agent"),
+                request.getRemoteAddr()
+        );
     }
 
     @GetMapping("/products")

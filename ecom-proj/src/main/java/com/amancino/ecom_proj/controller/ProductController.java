@@ -39,8 +39,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
 
-    public record RequestInfo(String method, String uri, String userAgent, String remoteAddress) {}
-
     @Autowired
     private ProductService service;
 
